@@ -1,0 +1,9 @@
+bs4
+time
+os
+argparse
+terminal_banner
+termcolor
+platform
+datetime
+selenium
