@@ -148,7 +148,7 @@ class Scraper:
 
 
 if __name__ == "__main__":
-    argv = argparse.ArgumentParser(usage = "temp.py -s [ SOURCE ] -d [ DURATION ] -k [ KEY_WORD ] -o [ ORDER ]")
+    argv = argparse.ArgumentParser(usage = "temp.py -s [ SOURCE ] -d [ DURATION ] -k [ KEY_WORD ] -o [ ORDER ] -t [ TYPE ]")
     argv.add_argument("-s", "--source", default="hackerone", help="Source to scrape from <hackerone>")
     argv.add_argument("-d","--duration", default=5, help="Duration to scrape for <seconds>")
     argv.add_argument("-k", "--key_word", default="", help="Key word to search for <api>")
