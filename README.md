@@ -1,4 +1,4 @@
-# Hackerone Scraper
+# InfoSec Reports
 Selenium based webscraper capable of scraping React.js and Angular.js web
 applications
 
