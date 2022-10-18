@@ -61,14 +61,14 @@ class Scraper:
         self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.options.add_experimental_option('useAutomationExtension', False)
         self.driver = webdriver.Chrome(options=self.options)
-        
+
 
     def _load_page(self):
         self.driver.get(self.url)
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "infinite-scroll-component")))
         ## sleep to ensure javascript DOM has finished loading
         sleep(2)
-        
+
 
     def _scroll_page(self):
         start_time = perf_counter()
@@ -130,6 +130,35 @@ class Scraper:
 
         self.driver.quit()
 
+    def _sloppy_deep_dive(self):
+        self.options = Options()
+        if self.WINDOWS_PLATFORM: self.options.add_argument('--headless')
+        self.options.add_argument("--start-maximized")
+        self.options.add_argument("--no-sandbox")
+        self.options.add_argument("--disable-dev-shm-usage")
+        self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        self.options.add_experimental_option('useAutomationExtension', False)
+        self.driver = webdriver.Chrome(options=self.options)
+
+        for report in self.DATABASE['reports']:
+            self.driver.get(report['url'])
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "report-information")))
+            sleep(2)
+
+            start_time = perf_counter()
+            while (perf_counter() - start_time) < 5:
+                self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                sleep(self.SCROLL_PAUSE_TIME)
+            sleep(1)
+            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+            entries = soup.find_all('div', class_='timeline-container-content')
+            md_string = ''
+            for entry in entries:
+                md_string += entry.text + '\n'
+            report['details'] = md_string
+        self.driver.quit()
+
+
     def _print_data(self):
         print(json.dumps(self.DATABASE, indent=4))
         if self.UNDISCLOSED_EXISTS:
@@ -176,4 +205,5 @@ if __name__ == "__main__":
     scraper._load_page()
     scraper._scroll_page()
     scraper._parse_page()
+    scraper._sloppy_deep_dive()
     scraper._print_data()
