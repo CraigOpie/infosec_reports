@@ -154,7 +154,7 @@ class Scraper:
             entries = soup.find_all('div', class_='timeline-container-content')
             md_string = ''
             for entry in entries:
-                md_string += entry.text
+                md_string += entry.text + '\n'
             report['details'] = md_string
         self.driver.quit()
 
