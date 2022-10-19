@@ -14,6 +14,7 @@ __maintainer__ = "Craig Opie"
 import sys
 import os
 import json
+import csv
 import argparse
 import mybanner
 import platform
@@ -41,7 +42,7 @@ class Scraper:
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
     }
 
-    def __init__(self, windows: bool, source: str, duration: int, key_word: str, order: str, type: str):
+    def __init__(self, windows: bool, source: str, duration: int, key_word: str, order: str, type: str, filename: str):
         self.WINDOWS_PLATFORM = windows
         self.sources = {
             "hackerone": "https://hackerone.com/hacktivity?querystring=&filter=type:public&order_direction=DESC&order_field=popular&followed_only=false&collaboration_only=false",
@@ -51,6 +52,7 @@ class Scraper:
         if (order != 'popular'): self.url = str(self.sources[source].replace('popular', 'latest_disclosable_activity_at'))
         if (type != 'public'): self.url = str(self.sources[source].replace('public', type))
         self.duration = duration
+        self.filename = filename
 
         ## headless mode is broken for linux
         self.options = Options()
@@ -130,6 +132,17 @@ class Scraper:
 
         self.driver.quit()
 
+    def _save_data(self):
+        if self.filename.split('.')[-1] == 'json':
+            with open(self.filename, 'w') as file:
+                json.dump(self.DATABASE, file, indent=4)
+        elif self.filename.split('.')[-1] == 'csv':
+            with open(self.filename, 'w') as file:
+                writer = csv.writer(file)
+                writer.writerow(self.DATABASE['reports'][0].keys())
+                for report in self.DATABASE['reports']:
+                    writer.writerow(report.values())
+
     def _sloppy_deep_dive(self):
         self.options = Options()
         if self.WINDOWS_PLATFORM: self.options.add_argument('--headless')
@@ -158,7 +171,6 @@ class Scraper:
             report['details'] = md_string
         self.driver.quit()
 
-
     def _print_data(self):
         print(json.dumps(self.DATABASE, indent=4))
         if self.UNDISCLOSED_EXISTS:
@@ -183,6 +195,7 @@ if __name__ == "__main__":
     argv.add_argument("-k", "--key_word", default="", help="Key word to search for <api>")
     argv.add_argument("-o", "--order", default="popular", help="Order to sort by <popular | new>")
     argv.add_argument("-t", "--type", default="public", help="<all | bounty-awarded | hacker-published | public>")
+    argv.add_argument("-f", "--file_out", default="public", help="<name and extension of the file to create>")
 
     parser = argv.parse_args()
     source = parser.source
@@ -190,6 +203,7 @@ if __name__ == "__main__":
     duration = parser.duration
     order = parser.order
     type = parser.type
+    filename = parser.file_out
     windows = False
 
     if(platform.system() == 'Windows'):
@@ -201,9 +215,10 @@ if __name__ == "__main__":
     cyber_banner = mybanner.CyberBanner()
     cyber_banner.print_banner()
 
-    scraper = Scraper(windows, source, duration, key_word, order, type)
+    scraper = Scraper(windows, source, duration, key_word, order, type, filename)
     scraper._load_page()
     scraper._scroll_page()
     scraper._parse_page()
     scraper._sloppy_deep_dive()
+    scraper._save_data()
     scraper._print_data()
