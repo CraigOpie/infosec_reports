@@ -1,0 +1,404 @@
+{
+    "reports" : [
+        {
+            "title" : "XSS in www.shopify.com/markets?utm_source=",
+            "report number" : "1699762",
+            "url" : "https://hackerone.com/reports/1699762",
+            "severity rating" : "None",
+            "bounty" : "$500.00",
+            "upvotes" : "26"
+        },
+        {
+            "title" : "Access to private file's of helpdesk.",
+            "report number" : "804534",
+            "url" : "https://hackerone.com/reports/804534",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "12"
+        },
+        {
+            "title" : "DOM XSS at `https://adobedocs.github.io/OAE_PartnerAPI/?configUrl={site}` due to outdated Swagger UI",
+            "report number" : "1736378",
+            "url" : "https://hackerone.com/reports/1736378",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "3"
+        },
+        {
+            "title" : "Users Without Permission Can Download Restricted Files",
+            "report number" : "794904",
+            "url" : "https://hackerone.com/reports/794904",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "10"
+        },
+        {
+            "title" : "Sub-Dept User Can Add User's To Main Department.",
+            "report number" : "890209",
+            "url" : "https://hackerone.com/reports/890209",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "6"
+        },
+        {
+            "title" : "TikTok Account Creation Date Information Disclosure",
+            "report number" : "1562020",
+            "url" : "https://hackerone.com/reports/1562020",
+            "severity rating" : "Low",
+            "bounty" : "$100.00",
+            "upvotes" : "8"
+        },
+        {
+            "title" : "mail.acronis.com is vulnerable to zero day vulnerability CVE-2022-41040",
+            "report number" : "1719719",
+            "url" : "https://hackerone.com/reports/1719719",
+            "severity rating" : "Critical",
+            "bounty" : "$1,000.00",
+            "upvotes" : "54"
+        },
+        {
+            "title" : "Unauthenticated SQL Injection at \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588  [HtUS]",
+            "report number" : "1626226",
+            "url" : "https://hackerone.com/reports/1626226",
+            "severity rating" : "Critical",
+            "bounty" : "$1,000.00",
+            "upvotes" : "33"
+        },
+        {
+            "title" : "Remote Command Execution via Github import",
+            "report number" : "1679624",
+            "url" : "https://hackerone.com/reports/1679624",
+            "severity rating" : "Critical",
+            "bounty" : "$33,510.00",
+            "upvotes" : "100"
+        },
+        {
+            "title" : "SSRF to read AWS metaData at https://\u2588\u2588\u2588\u2588\u2588/ [HtUS]",
+            "report number" : "1624140",
+            "url" : "https://hackerone.com/reports/1624140",
+            "severity rating" : "Critical",
+            "bounty" : "$1,000.00",
+            "upvotes" : "23"
+        },
+        {
+            "title" : "CVE-2017-5929: Hyperledger - Arbitrary Deserialization of Untrusted Data",
+            "report number" : "1739099",
+            "url" : "https://hackerone.com/reports/1739099",
+            "severity rating" : "None",
+            "bounty" : "None",
+            "upvotes" : "4"
+        },
+        {
+            "title" : "Otp  bypass in verifying nin",
+            "report number" : "1314172",
+            "url" : "https://hackerone.com/reports/1314172",
+            "severity rating" : "High",
+            "bounty" : "None",
+            "upvotes" : "8"
+        },
+        {
+            "title" : "Cross-site scripting on api.collabs.shopify.com",
+            "report number" : "1672459",
+            "url" : "https://hackerone.com/reports/1672459",
+            "severity rating" : "Medium",
+            "bounty" : "$1,600.00",
+            "upvotes" : "35"
+        },
+        {
+            "title" : "IDOR able to buy a plan with lesser fee",
+            "report number" : "1679276",
+            "url" : "https://hackerone.com/reports/1679276",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "None"
+        },
+        {
+            "title" : "IDOR allows an attacker to modify the links of any user",
+            "report number" : "1661113",
+            "url" : "https://hackerone.com/reports/1661113",
+            "severity rating" : "High",
+            "bounty" : "$5,000.00",
+            "upvotes" : "100"
+        },
+        {
+            "title" : "size_t-to-int vulnerability in exFAT leads to memory corruption via malformed USB flash drives",
+            "report number" : "1340942",
+            "url" : "https://hackerone.com/reports/1340942",
+            "severity rating" : "High",
+            "bounty" : "$10,000.00",
+            "upvotes" : "100"
+        },
+        {
+            "title" : "Local file read at https://\u2588\u2588\u2588\u2588/ [HtUS]",
+            "report number" : "1626210",
+            "url" : "https://hackerone.com/reports/1626210",
+            "severity rating" : "Critical",
+            "bounty" : "None",
+            "upvotes" : "7"
+        },
+        {
+            "title" : "IDOR  [mtnmobad.mtnbusiness.com.ng]",
+            "report number" : "1698006",
+            "url" : "https://hackerone.com/reports/1698006",
+            "severity rating" : "Critical",
+            "bounty" : "None",
+            "upvotes" : "19"
+        },
+        {
+            "title" : "[hta3] Chain of ESI Injection &amp; Reflected XSS leading to Account Takeover on [\u2588\u2588\u2588]",
+            "report number" : "1073780",
+            "url" : "https://hackerone.com/reports/1073780",
+            "severity rating" : "High",
+            "bounty" : "None",
+            "upvotes" : "13"
+        },
+        {
+            "title" : "XSS seems to work again after change to linkpop at https://linkpop.com/testnaglinagli",
+            "report number" : "1569940",
+            "url" : "https://hackerone.com/reports/1569940",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "17"
+        },
+        {
+            "title" : "XSS Reflected on reddit.com via url path",
+            "report number" : "1051373",
+            "url" : "https://hackerone.com/reports/1051373",
+            "severity rating" : "High",
+            "bounty" : "$5,000.00",
+            "upvotes" : "99"
+        },
+        {
+            "title" : "Stored XSS in the ticketing system",
+            "report number" : "1694037",
+            "url" : "https://hackerone.com/reports/1694037",
+            "severity rating" : "Medium",
+            "bounty" : "$1,000.00",
+            "upvotes" : "32"
+        },
+        {
+            "title" : "RCE via the DecompressedArchiveSizeValidator and Project BulkImports (behind feature flag)",
+            "report number" : "1609965",
+            "url" : "https://hackerone.com/reports/1609965",
+            "severity rating" : "Critical",
+            "bounty" : "$33,510.00",
+            "upvotes" : "100"
+        },
+        {
+            "title" : "Staff can create workflows in Shopify Admin without apps permission",
+            "report number" : "1521336",
+            "url" : "https://hackerone.com/reports/1521336",
+            "severity rating" : "Medium",
+            "bounty" : "$1,600.00",
+            "upvotes" : "12"
+        },
+        {
+            "title" : "Account takeover on \u2588\u2588\u2588\u2588\u2588\u2588\u2588 [HtUS]",
+            "report number" : "1627961",
+            "url" : "https://hackerone.com/reports/1627961",
+            "severity rating" : "High",
+            "bounty" : "$500.00",
+            "upvotes" : "9"
+        },
+        {
+            "title" : "Self XSS in https://linkpop.com/dashboard/admin",
+            "report number" : "1591403",
+            "url" : "https://hackerone.com/reports/1591403",
+            "severity rating" : "Low",
+            "bounty" : "$500.00",
+            "upvotes" : "11"
+        },
+        {
+            "title" : "Email Address Exposure via Gratipay Migration Tool",
+            "report number" : "1727044",
+            "url" : "https://hackerone.com/reports/1727044",
+            "severity rating" : "Medium",
+            "bounty" : "$100.00",
+            "upvotes" : "25"
+        },
+        {
+            "title" : "Use-after-free in setsockopt IPV6_2292PKTOPTIONS (CVE-2020-7457)",
+            "report number" : "1441103",
+            "url" : "https://hackerone.com/reports/1441103",
+            "severity rating" : "High",
+            "bounty" : "$10,000.00",
+            "upvotes" : "100"
+        },
+        {
+            "title" : "Misconfigured build on websites \"abuse.cloudflare.com\"",
+            "report number" : "1624911",
+            "url" : "https://hackerone.com/reports/1624911",
+            "severity rating" : "Low",
+            "bounty" : "$100.00",
+            "upvotes" : "8"
+        },
+        {
+            "title" : "Authentication bypass leads to Information Disclosure at  U.S Air Force \"https://\u2588\u2588\u2588\"",
+            "report number" : "1690548",
+            "url" : "https://hackerone.com/reports/1690548",
+            "severity rating" : "High",
+            "bounty" : "None",
+            "upvotes" : "5"
+        },
+        {
+            "title" : "Unauthenticated PII leak on verified/requested to be verified profiles on \u2588\u2588\u2588\u2588\u2588\u2588\u2588/app/org/{id}/profile/{id}/version/{id} [HtUS]",
+            "report number" : "1627962",
+            "url" : "https://hackerone.com/reports/1627962",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "5"
+        },
+        {
+            "title" : ".git folder exposed [HtUS]",
+            "report number" : "1624157",
+            "url" : "https://hackerone.com/reports/1624157",
+            "severity rating" : "Critical",
+            "bounty" : "None",
+            "upvotes" : "7"
+        },
+        {
+            "title" : "Path Traversal issue at https://\u2588\u2588\u2588\u2588/blaze/",
+            "report number" : "1320084",
+            "url" : "https://hackerone.com/reports/1320084",
+            "severity rating" : "High",
+            "bounty" : "None",
+            "upvotes" : "34"
+        },
+        {
+            "title" : "Reddit talk promotion offers don't expire, allowing users to accept them after being demoted",
+            "report number" : "1656380",
+            "url" : "https://hackerone.com/reports/1656380",
+            "severity rating" : "Medium",
+            "bounty" : "$1,000.00",
+            "upvotes" : "45"
+        },
+        {
+            "title" : "XSS in ZenTao integration affecting self hosted instances without strict CSP",
+            "report number" : "1542510",
+            "url" : "https://hackerone.com/reports/1542510",
+            "severity rating" : "High",
+            "bounty" : "$13,950.00",
+            "upvotes" : "62"
+        },
+        {
+            "title" : "Subdomain Takeover at http://\u2588\u2588.get8x8.com/",
+            "report number" : "1697402",
+            "url" : "https://hackerone.com/reports/1697402",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "4"
+        },
+        {
+            "title" : "Host Header Injection on https://\u2588\u2588\u2588/\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588/Account/ForgotPassword",
+            "report number" : "1679969",
+            "url" : "https://hackerone.com/reports/1679969",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "4"
+        },
+        {
+            "title" : "Account Takeover and Information update due to cross site request forgery via POST \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588/registration/my-account.cfm",
+            "report number" : "1626356",
+            "url" : "https://hackerone.com/reports/1626356",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "4"
+        },
+        {
+            "title" : "Deny of service via malicious Content-Type",
+            "report number" : "1715536",
+            "url" : "https://hackerone.com/reports/1715536",
+            "severity rating" : "High",
+            "bounty" : "None",
+            "upvotes" : "12"
+        },
+        {
+            "title" : "Blind SSRF in social-plugins.line.me",
+            "report number" : "833758",
+            "url" : "https://hackerone.com/reports/833758",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "26"
+        },
+        {
+            "title" : "IDOR leaking PII data via VendorId parameter",
+            "report number" : "1690044",
+            "url" : "https://hackerone.com/reports/1690044",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "4"
+        },
+        {
+            "title" : "SSRF on http://www.\u2588\u2588\u2588\u2588\u2588\u2588\u2588/crossdomain.php via url parameter",
+            "report number" : "971590",
+            "url" : "https://hackerone.com/reports/971590",
+            "severity rating" : "Critical",
+            "bounty" : "None",
+            "upvotes" : "24"
+        },
+        {
+            "title" : "Found Origin IP's Lead To Access \u2588\u2588\u2588\u2588",
+            "report number" : "1556808",
+            "url" : "https://hackerone.com/reports/1556808",
+            "severity rating" : "Low",
+            "bounty" : "None",
+            "upvotes" : "3"
+        },
+        {
+            "title" : "One-click account hijack for anyone using Apple sign-in with Reddit, due to response-type switch + leaking href to XSS on www.redditmedia.com",
+            "report number" : "1567186",
+            "url" : "https://hackerone.com/reports/1567186",
+            "severity rating" : "Critical",
+            "bounty" : "$10,000.00",
+            "upvotes" : "100"
+        },
+        {
+            "title" : "IDOR - Delete technical skill assessment result &amp; Gained Badges result of any user",
+            "report number" : "1592587",
+            "url" : "https://hackerone.com/reports/1592587",
+            "severity rating" : "Medium",
+            "bounty" : "$1,000.00",
+            "upvotes" : "24"
+        },
+        {
+            "title" : "Content injection in Jira issue title enabling sending arbitrary POST request as victim",
+            "report number" : "1533976",
+            "url" : "https://hackerone.com/reports/1533976",
+            "severity rating" : "High",
+            "bounty" : "$8,690.00",
+            "upvotes" : "39"
+        },
+        {
+            "title" : "[HTA2] Receiving\u2588\u2588\u2588\u2588 access request on @wearehackerone.com email address",
+            "report number" : "715740",
+            "url" : "https://hackerone.com/reports/715740",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "2"
+        },
+        {
+            "title" : "IDOR on Tagged People",
+            "report number" : "1555376",
+            "url" : "https://hackerone.com/reports/1555376",
+            "severity rating" : "Medium",
+            "bounty" : "None",
+            "upvotes" : "49"
+        },
+        {
+            "title" : "Blind SSRF via image upload URL downloader on https://\u2588\u2588\u2588\u2588\u2588\u2588/",
+            "report number" : "1691501",
+            "url" : "https://hackerone.com/reports/1691501",
+            "severity rating" : "High",
+            "bounty" : "None",
+            "upvotes" : "2"
+        },
+        {
+            "title" : "Bypass two-factor authentication",
+            "report number" : "1664974",
+            "url" : "https://hackerone.com/reports/1664974",
+            "severity rating" : "Low",
+            "bounty" : "$250.00",
+            "upvotes" : "20"
+        }
+    ]
+}

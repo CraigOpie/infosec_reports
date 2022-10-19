@@ -61,14 +61,14 @@ class Scraper:
         self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.options.add_experimental_option('useAutomationExtension', False)
         self.driver = webdriver.Chrome(options=self.options)
-        
+
 
     def _load_page(self):
         self.driver.get(self.url)
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "infinite-scroll-component")))
         ## sleep to ensure javascript DOM has finished loading
         sleep(2)
-        
+
 
     def _scroll_page(self):
         start_time = perf_counter()
@@ -130,6 +130,10 @@ class Scraper:
 
         self.driver.quit()
 
+    def _save_data(self):
+        with open('hackerone.json', 'w') as outfile:
+            outfile.write(str(json.dumps(self.DATABASE, indent=4, separators=(","," : "))))
+
     def _print_data(self):
         print(json.dumps(self.DATABASE, indent=4))
         if self.UNDISCLOSED_EXISTS:
@@ -176,4 +180,5 @@ if __name__ == "__main__":
     scraper._load_page()
     scraper._scroll_page()
     scraper._parse_page()
+    scraper._save_data()
     scraper._print_data()
