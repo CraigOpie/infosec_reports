@@ -74,7 +74,7 @@ class Scraper:
 
     def _scroll_page(self):
         start_time = perf_counter()
-        while (perf_counter() - start_time) < self.duration:
+        while (perf_counter() - start_time) < float(self.duration):
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             sleep(self.SCROLL_PAUSE_TIME)
 
@@ -96,9 +96,9 @@ class Scraper:
             tags = str(item.find('a', class_='spec-hacktivity-item-title')).replace('<a class=\"daisy-link routerlink daisy-link hacktivity-item__publicly-disclosed spec-hacktivity-item-title\" href=\"', '').replace('\">', '').replace('</a>', '').replace('</strong>', '').split('<strong>')
             for tag in tags:
                 if index == 1:
-                    title = str(tag).strip()
+                    title = str(tag).strip().replace(',', '')
                 else:
-                    report_number = str(tag).split('/')[-1]
+                    report_number = str(tag).split('/')[-1].replace(',', '')
                     url = str('https://hackerone.com' + tag)
                 index += 1
 
@@ -106,12 +106,12 @@ class Scraper:
             rating = str(item.find('div', class_='spec-severity-rating')).replace('<div class=\"sc-bcXHqe NcSfA daisy-severity-label spec-severity-rating\">', '').replace('</div>', '')
 
             ## Javascript DOM broke BeautifulSoup so I had to use Garbage Code to get the data
-            bounty = str(item.find('strong', class_='spec-hacktivity-item-bounty')).replace('<strong class=\"spec-hacktivity-item-bounty\">', '').replace('</strong>', '')
+            bounty = str(item.find('strong', class_='spec-hacktivity-item-bounty')).replace('<strong class=\"spec-hacktivity-item-bounty\">', '').replace('</strong>', '').replace(',', '')
             if str(bounty) == '':
                 bounty = 'None'
 
             ## Javascript DOM broke BeautifulSoup so I had to use Garbage Code to get the data
-            upvotes = str(item.find('span', class_='inline-help')).replace('<span class=\"inline-help\" style=\"display: inline-flex;\">', '').replace('</span>', '')
+            upvotes = str(item.find('span', class_='inline-help')).replace('<span class=\"inline-help\" style=\"display: inline-flex;\">', '').replace('</span>', '').replace(',', '')
             if str(upvotes) == '':
                 upvotes = '0'
 
@@ -168,7 +168,7 @@ class Scraper:
             md_string = ''
             for entry in entries:
                 md_string += entry.text + '\n'
-            report['details'] = md_string
+            report['details'] = md_string.replace(',', '')
         self.driver.quit()
 
     def _print_data(self):
