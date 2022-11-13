@@ -4,3 +4,4 @@ terminal_banner
 termcolor
 datetime
 selenium
+sqlite3

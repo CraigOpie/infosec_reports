@@ -17,6 +17,7 @@ import json
 import argparse
 import mybanner
 import platform
+import sqlite3 as sql
 from bs4 import BeautifulSoup
 from time import sleep
 from time import perf_counter
@@ -34,6 +35,7 @@ from selenium.webdriver.chrome.options import Options
 class Scraper:
     # class constants
     DATABASE = {}
+    CONN = sql.connect('h1.db')
     SCROLL_PAUSE_TIME = 1
     UNDISCLOSED_EXISTS = False
     WINDOWS_PLATFORM = False
@@ -41,7 +43,7 @@ class Scraper:
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
     }
 
-    def __init__(self, windows: bool, source: str, duration: int, key_word: str, order: str, type: str):
+    def __init__(self, windows: bool, source: str, duration: float, key_word: str, order: str, type: str):
         self.WINDOWS_PLATFORM = windows
         self.sources = {
             "hackerone": "https://hackerone.com/hacktivity?querystring=&filter=type:public&order_direction=DESC&order_field=popular&followed_only=false&collaboration_only=false",
@@ -50,7 +52,7 @@ class Scraper:
         if (key_word != ''): self.url = str(self.sources[source].replace('=&', '= &').replace(' ', key_word))
         if (order != 'popular'): self.url = str(self.sources[source].replace('popular', 'latest_disclosable_activity_at'))
         if (type != 'public'): self.url = str(self.sources[source].replace('public', type))
-        self.duration = duration
+        self.duration = float(duration)
 
         ## headless mode is broken for linux
         self.options = Options()
@@ -62,10 +64,30 @@ class Scraper:
         self.options.add_experimental_option('useAutomationExtension', False)
         self.driver = webdriver.Chrome(options=self.options)
 
+        self.CONN.execute('''CREATE TABLE IF NOT EXISTS REPORTS (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            DATE TEXT,
+            TITLE TEXT,
+            REPORT_NUMBER TEXT NOT NULL,
+            URL TEXT NOT NULL,
+            SEVERITY_RATING TEXT,
+            CVE TEXT,
+            WEAKNESS TEXT,
+            BOUNTY TEXT,
+            UPVOTES TEXT,
+            DETAILS TEXT);''')
+        self.CONN.commit()
+        self.CONN.close()
+
 
     def _load_page(self):
-        self.driver.get(self.url)
-        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "infinite-scroll-component")))
+        try:
+            self.driver.get(self.url)
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "infinite-scroll-component")))
+        except:
+            print('ERROR: Unable to load page.')
+            self.driver.quit()
+            sys.exit(1)
         ## sleep to ensure javascript DOM has finished loading
         sleep(2)
 
@@ -89,6 +111,7 @@ class Scraper:
             title = ""
             report_number = ""
             url = ""
+            cve = ""
 
             ## Javascript DOM broke BeautifulSoup so I had to use Garbage Code to get the data
             tags = str(item.find('a', class_='spec-hacktivity-item-title')).replace('<a class=\"daisy-link routerlink daisy-link hacktivity-item__publicly-disclosed spec-hacktivity-item-title\" href=\"', '').replace('\">', '').replace('</a>', '').replace('</strong>', '').split('<strong>')
@@ -100,13 +123,17 @@ class Scraper:
                     url = str('https://hackerone.com' + tag)
                 index += 1
 
+            if ('CVE-' in title):
+                cve = title.split('CVE-')[1].split(' ')[0].replace(':', '').replace(')', '')
+                cve = 'CVE-' + cve
+            
             ## Javascript DOM broke BeautifulSoup so I had to use Garbage Code to get the data
             rating = str(item.find('div', class_='spec-severity-rating')).replace('<div class=\"sc-bcXHqe NcSfA daisy-severity-label spec-severity-rating\">', '').replace('</div>', '')
 
             ## Javascript DOM broke BeautifulSoup so I had to use Garbage Code to get the data
             bounty = str(item.find('strong', class_='spec-hacktivity-item-bounty')).replace('<strong class=\"spec-hacktivity-item-bounty\">', '').replace('</strong>', '')
             if str(bounty) == '':
-                bounty = 'None'
+                bounty = '0.00'
 
             ## Javascript DOM broke BeautifulSoup so I had to use Garbage Code to get the data
             upvotes = str(item.find('span', class_='inline-help')).replace('<span class=\"inline-help\" style=\"display: inline-flex;\">', '').replace('</span>', '')
@@ -116,13 +143,17 @@ class Scraper:
             ## Publish the information for disclosed reports
             if title != '':
                 _report['title'] = str(title)
-                _report['report number'] = str(report_number)
+                _report['report number'] = str(report_number).replace('" rel="" target="', '')
                 _report['url'] = str(url)
                 _report['severity rating'] = rating
-                _report['bounty'] = str(bounty)
+                _report['bounty'] = str(bounty).replace('$', '').replace(',', '')
                 _report['upvotes'] = str(upvotes)
 
+                self.CONN = sql.connect('h1.db')
                 self.DATABASE['reports'].append(_report)
+                self.CONN.execute("INSERT INTO REPORTS (TITLE,REPORT_NUMBER,URL,SEVERITY_RATING,CVE,BOUNTY,UPVOTES) VALUES (?, ?, ?, ?, ?, ?, ?)", (str(title), str(report_number), str(url), str(rating), str(cve), str(bounty), str(upvotes)))    
+                self.CONN.commit()
+                self.CONN.close()
 
             ## Warn the user that there are undisclosed reports
             else:
@@ -141,21 +172,41 @@ class Scraper:
         self.driver = webdriver.Chrome(options=self.options)
 
         for report in self.DATABASE['reports']:
-            self.driver.get(report['url'])
-            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "report-information")))
-            sleep(2)
+            try:
+                self.driver.get(report['url'])
+                WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "report-information")))
 
-            start_time = perf_counter()
-            while (perf_counter() - start_time) < 5:
-                self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                sleep(self.SCROLL_PAUSE_TIME)
-            sleep(1)
-            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
-            entries = soup.find_all('div', class_='timeline-container-content')
-            md_string = ''
-            for entry in entries:
-                md_string += entry.text + '\n'
-            report['details'] = md_string
+                start_time = perf_counter()
+                while (perf_counter() - start_time) < 6:
+                    self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    sleep(self.SCROLL_PAUSE_TIME)
+                sleep(2)
+                soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+                entries = soup.find_all('div', class_='timeline-container-content')
+                md_string = ''
+                for entry in entries:
+                    md_string += entry.text.replace('"', "'").replace('\n', " ")
+                report['details'] = md_string
+
+                item = soup.find('div', class_='spec-weakness-meta-item')
+                weakness = str(item.find('small')).replace('<small>', '').replace('</small>', '')
+
+                item = soup.find('div', class_='spec-reported-at')
+                date = str(item.find('div', class_='daisy-helper-text')).replace('<div class="daisy-helper-text">', '').replace('</div>', '').replace('Reported', '').replace(' +0000', '').strip()
+
+
+                self.CONN = sql.connect('h1.db')
+                self.CONN.execute("UPDATE REPORTS SET DETAILS = ? WHERE REPORT_NUMBER = ?", (str(md_string), str(report['report number'])))
+                self.CONN.execute("UPDATE REPORTS SET WEAKNESS = ? WHERE REPORT_NUMBER = ?", (str(weakness), str(report['report number'])))
+                self.CONN.execute("UPDATE REPORTS SET DATE = ? WHERE REPORT_NUMBER = ?", (str(date), str(report['report number'])))
+                self.CONN.commit()
+                self.CONN.close()
+            except:
+                self.CONN = sql.connect('h1.db')
+                self.CONN.execute("DELETE FROM REPORTS WHERE REPORT_NUMBER = ?", (str(report['report number']),))
+                self.CONN.commit()
+                self.CONN.close()
+
         self.driver.quit()
 
 
@@ -177,7 +228,7 @@ class Scraper:
 
 
 if __name__ == "__main__":
-    argv = argparse.ArgumentParser(usage = "temp.py -s [ SOURCE ] -d [ DURATION ] -k [ KEY_WORD ] -o [ ORDER ] -t [ TYPE ]")
+    argv = argparse.ArgumentParser(usage = "main.py -s [ SOURCE ] -d [ DURATION ] -k [ KEY_WORD ] -o [ ORDER ] -t [ TYPE ]")
     argv.add_argument("-s", "--source", default="hackerone", help="Source to scrape from <hackerone>")
     argv.add_argument("-d","--duration", default=5, help="Duration to scrape for <seconds>")
     argv.add_argument("-k", "--key_word", default="", help="Key word to search for <api>")
