@@ -14,6 +14,7 @@ __maintainer__ = "Craig Opie"
 import sys
 import os
 import json
+import csv
 import argparse
 import mybanner
 import platform
@@ -43,7 +44,7 @@ class Scraper:
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
     }
 
-    def __init__(self, windows: bool, source: str, duration: float, key_word: str, order: str, type: str):
+    def __init__(self, windows: bool, source: str, duration: float, key_word: str, order: str, type: str, filename: str):
         self.WINDOWS_PLATFORM = windows
         self.sources = {
             "hackerone": "https://hackerone.com/hacktivity?querystring=&filter=type:public&order_direction=DESC&order_field=popular&followed_only=false&collaboration_only=false",
@@ -52,7 +53,10 @@ class Scraper:
         if (key_word != ''): self.url = str(self.sources[source].replace('=&', '= &').replace(' ', key_word))
         if (order != 'popular'): self.url = str(self.sources[source].replace('popular', 'latest_disclosable_activity_at'))
         if (type != 'public'): self.url = str(self.sources[source].replace('public', type))
+
         self.duration = float(duration)
+        self.filename = filename
+
 
         ## headless mode is broken for linux
         self.options = Options()
@@ -94,7 +98,7 @@ class Scraper:
 
     def _scroll_page(self):
         start_time = perf_counter()
-        while (perf_counter() - start_time) < self.duration:
+        while (perf_counter() - start_time) < float(self.duration):
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             sleep(self.SCROLL_PAUSE_TIME)
 
@@ -117,9 +121,9 @@ class Scraper:
             tags = str(item.find('a', class_='spec-hacktivity-item-title')).replace('<a class=\"daisy-link routerlink daisy-link hacktivity-item__publicly-disclosed spec-hacktivity-item-title\" href=\"', '').replace('\">', '').replace('</a>', '').replace('</strong>', '').split('<strong>')
             for tag in tags:
                 if index == 1:
-                    title = str(tag).strip()
+                    title = str(tag).strip().replace(',', '')
                 else:
-                    report_number = str(tag).split('/')[-1]
+                    report_number = str(tag).split('/')[-1].replace(',', '')
                     url = str('https://hackerone.com' + tag)
                 index += 1
 
@@ -131,12 +135,12 @@ class Scraper:
             rating = str(item.find('div', class_='spec-severity-rating')).replace('<div class=\"sc-bcXHqe NcSfA daisy-severity-label spec-severity-rating\">', '').replace('</div>', '')
 
             ## Javascript DOM broke BeautifulSoup so I had to use Garbage Code to get the data
-            bounty = str(item.find('strong', class_='spec-hacktivity-item-bounty')).replace('<strong class=\"spec-hacktivity-item-bounty\">', '').replace('</strong>', '')
+            bounty = str(item.find('strong', class_='spec-hacktivity-item-bounty')).replace('<strong class=\"spec-hacktivity-item-bounty\">', '').replace('</strong>', '').replace(',', '')
             if str(bounty) == '':
                 bounty = '0.00'
 
             ## Javascript DOM broke BeautifulSoup so I had to use Garbage Code to get the data
-            upvotes = str(item.find('span', class_='inline-help')).replace('<span class=\"inline-help\" style=\"display: inline-flex;\">', '').replace('</span>', '')
+            upvotes = str(item.find('span', class_='inline-help')).replace('<span class=\"inline-help\" style=\"display: inline-flex;\">', '').replace('</span>', '').replace(',', '')
             if str(upvotes) == '':
                 upvotes = '0'
 
@@ -160,6 +164,17 @@ class Scraper:
                 self.UNDISCLOSED_EXISTS = True
 
         self.driver.quit()
+
+    def _save_data(self):
+        if self.filename.split('.')[-1] == 'json':
+            with open(self.filename, 'w') as file:
+                json.dump(self.DATABASE, file, indent=4)
+        elif self.filename.split('.')[-1] == 'csv':
+            with open(self.filename, 'w') as file:
+                writer = csv.writer(file)
+                writer.writerow(self.DATABASE['reports'][0].keys())
+                for report in self.DATABASE['reports']:
+                    writer.writerow(report.values())
 
     def _sloppy_deep_dive(self):
         self.options = Options()
@@ -209,7 +224,6 @@ class Scraper:
 
         self.driver.quit()
 
-
     def _print_data(self):
         print(json.dumps(self.DATABASE, indent=4))
         if self.UNDISCLOSED_EXISTS:
@@ -234,6 +248,7 @@ if __name__ == "__main__":
     argv.add_argument("-k", "--key_word", default="", help="Key word to search for <api>")
     argv.add_argument("-o", "--order", default="popular", help="Order to sort by <popular | new>")
     argv.add_argument("-t", "--type", default="public", help="<all | bounty-awarded | hacker-published | public>")
+    argv.add_argument("-f", "--file_out", default="public", help="<name and extension of the file to create>")
 
     parser = argv.parse_args()
     source = parser.source
@@ -241,6 +256,7 @@ if __name__ == "__main__":
     duration = parser.duration
     order = parser.order
     type = parser.type
+    filename = parser.file_out
     windows = False
 
     if(platform.system() == 'Windows'):
@@ -252,9 +268,10 @@ if __name__ == "__main__":
     cyber_banner = mybanner.CyberBanner()
     cyber_banner.print_banner()
 
-    scraper = Scraper(windows, source, duration, key_word, order, type)
+    scraper = Scraper(windows, source, duration, key_word, order, type, filename)
     scraper._load_page()
     scraper._scroll_page()
     scraper._parse_page()
     scraper._sloppy_deep_dive()
+    scraper._save_data()
     scraper._print_data()
