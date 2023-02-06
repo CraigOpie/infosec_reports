@@ -3,7 +3,7 @@ Selenium based webscraper capable of scraping React.js and Angular.js web applic
 
 The script will fetch information based on user input to command line arguments.  The output is in JSON object notation.
 
-Headless mode does not work in Linux.
+Software was developed and tested on a fedora 37 environment.
 
 ## Initial Run:
 1. python -m venv env
@@ -15,8 +15,12 @@ Place chromedriver in PATH if its not already there.
 
 ## Examples:
 ```bash
-python src/main.py -s hackerone -d 30 -k api -o popular -t public
+python src/main.py -s hackerone -d 30 -k api -o popular -t public  -H True
+```
 
+## Export DB to CSV
+```bash
+sqlite3 -header -csv h1.db "select * from reports;" > db.csv
 ```
 
 ## Issues

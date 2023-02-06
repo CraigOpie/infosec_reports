@@ -1,0 +1,18 @@
+Metadata-Version: 2.0
+Name: terminal-banner
+Version: 0.2.0
+Summary: Text Banner for Terminals
+Home-page: https://github.com/martincyoung/terminal_banner
+Author: Martin Young
+Author-email: martin.young@cantab.net
+License: MIT
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+
+UNKNOWN
+
+
