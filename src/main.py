@@ -265,7 +265,7 @@ def main():
     arguments = argv.parse_args()
 
     headless = True
-    if arguments.headless.title() == "False":
+    if arguments.no_headless == "False":
         headless = False
 
     if(platform.system() == 'Windows'):
