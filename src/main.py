@@ -261,15 +261,15 @@ def main():
     argv.add_argument("-t", "--type", default="public", help="<all | bounty-awarded | hacker-published | public>")
     argv.add_argument("-p", "--print", default="False", help="Print output to console <True | False>")
     argv.add_argument("-f", "--file_out", default="outfile_db.json", help="<name and extension of the file to create>")
-    argv.add_argument("-H", "--headless", default="False", help="Use headless mode for selenium <True | False>")
+    argv.add_argument("-H", "--no-headless", default="False", help="Use headless mode for selenium <True | False>")
     arguments = argv.parse_args()
 
-    headless = False
+    headless = True
+    if arguments.headless.title() == "False":
+        headless = False
+
     if(platform.system() == 'Windows'):
         os.system('cls')
-        headless = True
-    if arguments.headless.title() == "True":
-        headless = True
     if (platform.system() == 'Linux'):
         os.system('clear')
 
