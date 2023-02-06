@@ -19,6 +19,9 @@ python src/main.py -s hackerone -d 30 -k api -o popular -t public  -H True
 ```
 
 ## Export DB to CSV
+Install sqlite3 for command line use or use your own preferred method:
+- `sudo dnf install sqlite3`
+
 ```bash
 sqlite3 -header -csv h1.db "select * from reports;" > db.csv
 ```
